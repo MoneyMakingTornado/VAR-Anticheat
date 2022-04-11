@@ -6,3 +6,7 @@ commands:
       description: Take a snapshot of the players movement for 30 seconds
       usage: /<command> <player>
       permission: anticheat.snapshot
+   foreversnapshot:
+      description: Record all players movements forever (until server restart)
+      usage: /<command>
+      permission: anticheat.snapshot

@@ -25,14 +25,30 @@ public class App extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        getLogger().info("VAR Anticheat is enabled! - Version: " + getDescription().getVersion() + "\nA machine learning anticheat made by MoneyMakingTornado on Github");
+        getLogger().info("VAR Anticheat is enabled! - Version: " + getDescription().getVersion()
+                + "\nA machine learning anticheat made by MoneyMakingTornado on Github");
         this.getCommand("snapshot").setExecutor(this);
-        //getServer().getPluginManager().registerEvents(new App(), this);
+        // getServer().getPluginManager().registerEvents(new App(), this);
     }
 
     @Override
     public void onDisable() {
         getLogger().info("See you again, SpigotMC!");
+    }
+
+    public void SnapshotAll() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+            @Override
+            public void run() {
+                if (!ForeverSnapshot)
+                    return;
+                Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
+                for (Player player : players) {
+                    SnapshotPlayerLog(player);
+                }
+                SnapshotAll();
+            }
+        }, 30 * 20L);
     }
 
     public boolean SnapshotPlayerLog(Player player) {
@@ -57,15 +73,14 @@ public class App extends JavaPlugin implements Listener {
                 PlayerLogWriter.write(",");
             }
             PlayerLogWriter.close();
-             
-            int TaskID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() 
-            {
+
+            int TaskID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                 @Override
                 public void run() {
                     LogPlayer(player, FileName);
                 }
             }, 0L, 1L);
-            
+
             Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                 @Override
                 public void run() {
@@ -186,10 +201,13 @@ public class App extends JavaPlugin implements Listener {
         // getLogger().info("Wrote data for " + PlayerName);
     }
 
+    boolean ForeverSnapshot = false;
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         // log cmd and arg
-        // System.out.println("sender: " + sender.toString() + "cmd: " + cmd.toString() + "label: " + label.toString() + "args: " + args.toString());
+        // System.out.println("sender: " + sender.toString() + "cmd: " + cmd.toString()
+        // + "label: " + label.toString() + "args: " + args.toString());
         // System.out.println(cmd.getName(), cmd.);
         if (cmd.getName().equalsIgnoreCase("snapshot")) {
             Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
@@ -204,6 +222,18 @@ public class App extends JavaPlugin implements Listener {
                     return true;
                 }
             }
+        }
+        if (cmd.getName().equalsIgnoreCase("foreversnapshot")) {
+            Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
+            if (ForeverSnapshot) {
+                ForeverSnapshot = false;
+                sender.sendMessage("ForeverSnapshot is now false");
+            } else {
+                ForeverSnapshot = true;
+                sender.sendMessage("ForeverSnapshot is now true");
+                SnapshotAll();
+            }
+            return true;
         }
         return false;
     }
