@@ -224,7 +224,6 @@ public class App extends JavaPlugin implements Listener {
             }
         }
         if (cmd.getName().equalsIgnoreCase("foreversnapshot")) {
-            Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
             if (ForeverSnapshot) {
                 ForeverSnapshot = false;
                 sender.sendMessage("ForeverSnapshot is now false");
