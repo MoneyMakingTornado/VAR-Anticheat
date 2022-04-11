@@ -1,0 +1,8 @@
+main: github.moneymakingtornado.App
+name: VAR-Anticheat
+version: 0.0.1
+commands:
+   snapshot:
+      description: Take a snapshot of the players movement for 30 seconds
+      usage: /<command> <player>
+      permission: anticheat.snapshot
