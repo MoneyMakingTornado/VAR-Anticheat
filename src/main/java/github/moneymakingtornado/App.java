@@ -22,7 +22,7 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 
 public class App extends JavaPlugin implements Listener {
-
+    //test
     @Override
     public void onEnable() {
         getLogger().info("VAR Anticheat is enabled! - Version: " + getDescription().getVersion()
