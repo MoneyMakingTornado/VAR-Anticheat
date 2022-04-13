@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.UUID;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class App extends JavaPlugin implements Listener {
@@ -49,8 +50,36 @@ public class App extends JavaPlugin implements Listener {
             getLogger().warning(e.getMessage());
             e.printStackTrace();
         }
+
+        // // If SnapshotForever is true in plugin.yml make run snapshotall()
+        if (getConfig().getBoolean("SnapshotForever")) {
+            getLogger().info("SnapshotForever is true, running snapshotall()");
+            ForeverSnapshot = true;
+            SnapshotAll();
+        }
     }
 
+    // FileConfiguration config = getConfig();
+
+    // // this will return the boolean you want to get
+    // public static Boolean getValue(String value) {
+    //     return getConfig().getBoolean(value);
+    // }
+
+    // // use this code to set the value
+    // public static void setValue(String value, Boolean bool) {
+    //     getConfig().set(value, bool);
+    // }
+
+    // save the configuration
+    public void save() {
+        try {
+            getConfig().save(new File("path/to/config.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     @Override
     public void onDisable() {
         getLogger().info("See you again, SpigotMC!");
