@@ -51,8 +51,7 @@ public class App extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 
-        // // If SnapshotForever is true in plugin.yml make run snapshotall()
-        if (getConfig().getBoolean("SnapshotForever")) {
+        if (getConfig().getBoolean("SnapshotForever") == true) {
             getLogger().info("SnapshotForever is true, running snapshotall()");
             ForeverSnapshot = true;
             SnapshotAll();
