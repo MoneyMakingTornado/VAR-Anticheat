@@ -29,6 +29,26 @@ public class App extends JavaPlugin implements Listener {
                 + "\nA machine learning anticheat made by MoneyMakingTornado on Github");
         this.getCommand("snapshot").setExecutor(this);
         // getServer().getPluginManager().registerEvents(new App(), this);
+        try {
+            FileWriter PlayerLogWriter = new FileWriter("./PlayerLogs/" + "ReadMe.txt");
+            String Headers[] = { "Time (milliseconds)", "PlayerName", "PlayerUUID", "PlayerGamemode", "PlayerPing",
+                    "PlayerMovementEffected", "PlayerYaw", "PlayerPitch", "PlayerVelocity",
+                    "PlayerWalkSpeed", "PlayerVehicle", "PlayerPose", "PlayerFoodLevel", "PlayerHealth",
+                    "PlayerRegenRate", "PlayerSaturation", "PlayerItemInUse", "PlayerItemOnCursor",
+                    "PlayerAttackCooldown", "PlayerNoDamageTicks", "PlayerGetLastDamage",
+                    "PlayerFireTicks", "PlayerExhaustion", "PlayerFreezeTicks" };
+            PlayerLogWriter.write("All colums are in the follwoing order:\n");
+            for (String str : Headers) {
+                PlayerLogWriter.write('"');
+                PlayerLogWriter.write(str);
+                PlayerLogWriter.write('"');
+                PlayerLogWriter.write(",");
+            }
+            PlayerLogWriter.close();
+        } catch (Exception e) {
+            getLogger().warning(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -57,26 +77,12 @@ public class App extends JavaPlugin implements Listener {
             String FileName = (player.getName() + " " + time + ".csv");
             String FilePath = ("./PlayerLogs/" + FileName);
             File PlayerLogFile = new File(FilePath);
-            FileWriter PlayerLogWriter = new FileWriter("./PlayerLogs/" + "ReadMe.txt");
             PlayerLogFile.createNewFile();
-            String Headers[] = { "Time (milliseconds)", "PlayerName", "PlayerUUID", "PlayerGamemode", "PlayerPing",
-                    "PlayerMovementEffected", "PlayerYaw", "PlayerPitch", "PlayerVelocity",
-                    "PlayerWalkSpeed", "PlayerVehicle", "PlayerPose", "PlayerFoodLevel", "PlayerHealth",
-                    "PlayerRegenRate", "PlayerSaturation", "PlayerItemInUse", "PlayerItemOnCursor",
-                    "PlayerAttackCooldown", "PlayerNoDamageTicks", "PlayerGetLastDamage",
-                    "PlayerFireTicks", "PlayerExhaustion", "PlayerFreezeTicks" };
-            PlayerLogWriter.write("All colums are in the follwoing order:\n");
-            for (String str : Headers) {
-                PlayerLogWriter.write('"');
-                PlayerLogWriter.write(str);
-                PlayerLogWriter.write('"');
-                PlayerLogWriter.write(",");
-            }
-            PlayerLogWriter.close();
 
             int TaskID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                 @Override
                 public void run() {
+                    if (!player.isOnline()) return;
                     LogPlayer(player, FileName);
                 }
             }, 0L, 1L);
