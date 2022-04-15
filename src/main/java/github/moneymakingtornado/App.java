@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.util.Collection;
 import java.util.UUID;
 import java.io.FileWriter;
@@ -43,7 +44,9 @@ public class App extends JavaPlugin implements Listener {
                 PlayerLogWriter.write('"');
                 PlayerLogWriter.write(str);
                 PlayerLogWriter.write('"');
-                PlayerLogWriter.write(",");
+                if(str != Headers[Headers.length - 1]) {
+                    PlayerLogWriter.write(", ");
+                }
             }
             PlayerLogWriter.close();
         } catch (Exception e) {
@@ -120,7 +123,7 @@ public class App extends JavaPlugin implements Listener {
                 public void run() {
                     Bukkit.getServer().getScheduler().cancelTask(TaskID);
                 }
-            }, 30 * 20L);
+            }, (30 * 20) - 1L);
 
             return true;
         } catch (Exception e) {
@@ -209,7 +212,13 @@ public class App extends JavaPlugin implements Listener {
             }
             contentToAppend = contentToAppend.substring(0, contentToAppend.length() - 1);
             FileWriter fw = new FileWriter(FilePath, true);
+            FileReader fr = new FileReader(FilePath);
             BufferedWriter bw = new BufferedWriter(fw);
+            if (fr.read() == -1) 
+            {
+                contentToAppend = contentToAppend.substring(1, contentToAppend.length());
+            }
+            fr.close();
             bw.write(contentToAppend);
             bw.close();
         } catch (Exception e) {
